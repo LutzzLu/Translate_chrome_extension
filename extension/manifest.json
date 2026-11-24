@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Paper Translator",
+  "version": "1.0.0",
+  "description": "Translate scientific papers (web pages and PDFs) while keeping citations, superscripts, math and formatting exactly as in the original.",
+  "minimum_chrome_version": "120",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Paper Translator",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "js": ["lib/defaults.js", "lib/markers.js", "lib/glossary.js", "content/content.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "toggle-translation": {
+      "suggested_key": { "default": "Alt+T" },
+      "description": "Translate the page / show the original"
+    },
+    "toggle-mode": {
+      "description": "Switch between Replace and Bilingual display"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}

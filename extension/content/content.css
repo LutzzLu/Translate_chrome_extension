@@ -1,0 +1,14 @@
+/* Paper Translator: styles used only while a page is translated. */
+
+/* Bilingual mode: keep each original paragraph visually paired with its
+   translation (small gap between them, normal gap to the next pair). */
+.ptx-bi-src {
+  margin-bottom: 0.3em !important;
+}
+.ptx-bi {
+  margin-top: 0.3em !important;
+}
+.ptx-bi-block {
+  display: block !important;
+  margin-top: 0.25em;
+}

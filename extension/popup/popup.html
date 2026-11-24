@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Paper Translator</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <img src="../icons/icon48.png" alt="" width="28" height="28" />
+      <div class="titles">
+        <h1>Paper Translator</h1>
+        <p id="host" class="host"></p>
+      </div>
+    </header>
+
+    <section id="webSection" class="card" hidden>
+      <button id="mainBtn" class="primary">Translate page</button>
+      <p id="status" class="status"></p>
+    </section>
+
+    <section id="pdfSection" class="card" hidden>
+      <p class="note">
+        This tab shows a PDF. Chrome doesn't let extensions change its built-in PDF viewer, so the PDF opens in
+        Paper Translator's own viewer, where it can be translated.
+      </p>
+      <button id="pdfBtn" class="primary">Translate this PDF</button>
+    </section>
+
+    <section id="viewerSection" class="card" hidden>
+      <button id="viewerBtn" class="primary">Show original / translation</button>
+      <p class="note">You can also use the toolbar at the top of the PDF viewer.</p>
+    </section>
+
+    <section id="unsupportedSection" class="card" hidden>
+      <p class="note">Chrome doesn't allow extensions to run on this page.</p>
+    </section>
+
+    <section class="settings">
+      <div class="row">
+        <span class="label">Display</span>
+        <div class="seg" id="modeSeg" role="group" aria-label="Display mode">
+          <button data-mode="replace" title="Translation replaces the original text">Replace</button>
+          <button data-mode="bilingual" title="Translation shown under each original paragraph">Bilingual</button>
+        </div>
+      </div>
+      <label class="row">
+        <span class="label">Translate to</span>
+        <select id="lang"></select>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="paperMode" />
+        <span>Paper mode <small>Translate only the article. Keep references, authors and affiliations in the original language.</small></span>
+      </label>
+      <label class="check" id="autoRow">
+        <input type="checkbox" id="autoSite" />
+        <span>Always translate <b id="autoHost"></b></span>
+      </label>
+    </section>
+
+    <footer>
+      <a href="#" id="openPdfFile">Open a PDF file…</a>
+      <span class="shortcut">Shortcut <kbd id="shortcut">Alt+T</kbd></span>
+    </footer>
+
+    <script src="../lib/defaults.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

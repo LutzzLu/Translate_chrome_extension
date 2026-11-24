@@ -1,0 +1,1 @@
+pdfjs-dist 6.5.438 legacy build (https://github.com/mozilla/pdf.js), Apache-2.0. Legacy build = includes polyfills so it runs on older Chrome versions too.

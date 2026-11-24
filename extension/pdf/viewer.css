@@ -1,0 +1,484 @@
+:root {
+  --tb-h: 46px;
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
+  --accent: #8ab4f8;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background: #525659;
+  color: #202124;
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ------------------------------------------------------------ toolbar */
+#toolbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--tb-h);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  background: #323639;
+  color: #f1f3f4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  user-select: none;
+}
+.tb-left,
+.tb-center,
+.tb-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.tb-left {
+  flex: 1 1 auto;
+}
+.tb-center,
+.tb-right {
+  flex: none;
+}
+.tb-right {
+  justify-content: flex-end;
+}
+@media (max-width: 1250px) {
+  .page-info {
+    display: none;
+  }
+  #toolbar select {
+    max-width: 130px;
+  }
+}
+@media (max-width: 1000px) {
+  .doc-title {
+    display: none;
+  }
+}
+.doc-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #e8eaed;
+  font-weight: 500;
+}
+.page-info {
+  min-width: 64px;
+  text-align: right;
+  color: #bdc1c6;
+  font-variant-numeric: tabular-nums;
+}
+.btn {
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 10px;
+  background: transparent;
+  color: #f1f3f4;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.btn.icon {
+  width: 30px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1;
+}
+.zoom-label {
+  min-width: 56px;
+  font-variant-numeric: tabular-nums;
+}
+.seg {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.seg button {
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  background: transparent;
+  color: #bdc1c6;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.seg button:hover {
+  color: #fff;
+}
+.seg button.on {
+  background: #f1f3f4;
+  color: #202124;
+  font-weight: 600;
+}
+select {
+  max-width: 170px;
+  padding: 4px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: #3c4043;
+  color: #f1f3f4;
+  font: inherit;
+}
+.progress {
+  border: 0;
+  background: transparent;
+  color: #bdc1c6;
+  font: inherit;
+  white-space: nowrap;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: default;
+}
+.progress.ok {
+  color: #81c995;
+}
+.progress.err {
+  color: #f28b82;
+  cursor: pointer;
+}
+.progress.err:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ------------------------------------------------------------ pages */
+#viewer {
+  position: absolute;
+  inset: var(--tb-h) 0 0 0;
+  overflow: auto;
+  outline: none;
+}
+#pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: min-content;
+  padding: 14px 16px 40px;
+  gap: 14px;
+}
+.row {
+  display: flex;
+  gap: 16px;
+  flex: none;
+}
+.pg {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.pg canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.view-original .pg.tr {
+  display: none;
+}
+.view-translated .pg.orig {
+  display: none;
+}
+
+/* Translated text block drawn over the original paragraph. */
+.tb {
+  position: absolute;
+  overflow: hidden;
+  margin: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: auto;
+  hyphens: none;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    "Noto Sans SC", "Source Han Sans SC", "WenQuanYi Micro Hei", "Droid Sans Fallback", sans-serif;
+  font-weight: 400;
+  cursor: text;
+  user-select: text;
+}
+.tb.h {
+  font-weight: 600;
+}
+.tb.overflow {
+  overflow: visible;
+  z-index: 1;
+}
+.tb sup,
+.tb sub {
+  font-size: 0.62em;
+  line-height: 0;
+}
+.tb .url {
+  word-break: break-all;
+}
+.measure {
+  position: absolute;
+  left: -100000px;
+  top: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------ drop zone / messages */
+.drop,
+.message {
+  position: absolute;
+  inset: var(--tb-h) 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 5;
+}
+.drop[hidden],
+.message[hidden] {
+  display: none;
+}
+.drop.dragging .drop-card {
+  outline: 3px dashed var(--accent);
+  outline-offset: 6px;
+}
+.drop-card,
+.message-card {
+  max-width: 460px;
+  padding: 28px 32px;
+  border-radius: 14px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+.drop-card h2 {
+  margin: 8px 0 6px;
+  font-size: 20px;
+}
+.drop-card p {
+  margin: 6px 0;
+  color: #5f6368;
+}
+.drop-card .hint {
+  margin-top: 16px;
+  font-size: 12px;
+}
+.message-card p {
+  margin: 0;
+  white-space: pre-line;
+}
+.message-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 14px;
+}
+.message-actions:empty {
+  display: none;
+}
+button.primary {
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 16px;
+  background: #1a73e8;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.primary:hover {
+  background: #1765cc;
+}
+button.secondary {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  background: #fff;
+  color: #202124;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------ PDF.js text layer
+   (copied from pdfjs-dist 6.5.438 web/pdf_viewer.css, Apache-2.0) */
+.textLayer {
+  color-scheme: only light;
+
+  position: absolute;
+  text-align: initial;
+  inset: 0;
+  overflow: clip;
+  opacity: 1;
+  line-height: 1;
+  letter-spacing: normal;
+  word-spacing: normal;
+  -webkit-text-size-adjust: none;
+     -moz-text-size-adjust: none;
+          text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  caret-color: CanvasText;
+  z-index: 0;
+
+  &.highlighting {
+    touch-action: none;
+  }
+
+  :is(span, br) {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+    -webkit-user-select: text;
+       -moz-user-select: text;
+            user-select: text;
+  }
+  --min-font-size: 1;
+  --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+  --min-font-size-inv: calc(1 / var(--min-font-size));
+
+  > :not(.markedContent),
+  .markedContent span:not(.markedContent) {
+    z-index: 1;
+
+    --font-height: 0;
+    font-size: calc(var(--text-scale-factor) * var(--font-height));
+
+    --scale-x: 1;
+    --rotate: 0deg;
+    transform: rotate(var(--rotate)) scaleX(var(--scale-x))
+      scale(var(--min-font-size-inv));
+  }
+
+  .markedContent {
+    display: contents;
+  }
+
+  span[role="img"] {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    cursor: default;
+  }
+
+  .highlight {
+    --highlight-bg-color: rgb(180 0 170 / 0.25);
+    --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
+    --highlight-backdrop-filter: none;
+    --highlight-selected-backdrop-filter: none;
+
+    @media screen and (forced-colors: active) {
+      --highlight-bg-color: transparent;
+      --highlight-selected-bg-color: transparent;
+      --highlight-backdrop-filter: var(--hcm-highlight-filter);
+      --highlight-selected-backdrop-filter: var(
+        --hcm-highlight-selected-filter
+      );
+    }
+
+    margin: -1px;
+    padding: 1px;
+    background-color: var(--highlight-bg-color);
+    backdrop-filter: var(--highlight-backdrop-filter);
+    border-radius: 4px;
+
+    &.appended {
+      position: initial;
+    }
+
+    &.begin {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &.end {
+      border-radius: 0 4px 4px 0;
+    }
+
+    &.middle {
+      border-radius: 0;
+    }
+
+    &.selected {
+      background-color: var(--highlight-selected-bg-color);
+      backdrop-filter: var(--highlight-selected-backdrop-filter);
+      scroll-margin-top: 50px;
+    }
+  }
+
+  ::-moz-selection {
+    background: rgba(0 0 255 / 0.25);
+    background: color-mix(in srgb, AccentColor, transparent 50%);
+    color: transparent;
+  }
+
+  ::selection {
+    background: rgba(0 0 255 / 0.25);
+    background: color-mix(in srgb, AccentColor, transparent 50%);
+    color: transparent;
+  }
+
+  &.selectionRendering {
+    ::-moz-selection {
+      background: transparent;
+      color: transparent;
+    }
+    ::selection {
+      background: transparent;
+      color: transparent;
+    }
+  }
+  br::-moz-selection {
+    background: transparent;
+  }
+  br::selection {
+    background: transparent;
+  }
+
+  .endOfContent {
+    display: block;
+    position: absolute;
+    inset: 100% 0 0;
+    z-index: 0;
+    cursor: default;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+
+  &.selecting .endOfContent {
+    top: 0;
+  }
+}
+
+.view-translated .textLayer,
+.pg.tr .textLayer {
+  display: none;
+}

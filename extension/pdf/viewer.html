@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PDF Translator</title>
+    <link rel="icon" href="../icons/icon32.png" />
+    <link rel="stylesheet" href="viewer.css" />
+  </head>
+  <body class="view-original">
+    <header id="toolbar">
+      <div class="tb-left">
+        <button id="openBtn" class="btn" title="Open a PDF file from your computer">Open…</button>
+        <input id="fileInput" type="file" accept="application/pdf,.pdf" hidden />
+        <span id="docTitle" class="doc-title"></span>
+      </div>
+      <div class="tb-center">
+        <span id="pageInfo" class="page-info"></span>
+        <button id="zoomOut" class="btn icon" title="Zoom out (Ctrl/⌘ −)">−</button>
+        <button id="zoomLabel" class="btn zoom-label" title="Fit to width">100%</button>
+        <button id="zoomIn" class="btn icon" title="Zoom in (Ctrl/⌘ +)">+</button>
+      </div>
+      <div class="tb-right">
+        <div class="seg" id="viewSeg" role="group" aria-label="View">
+          <button data-view="original">Original</button>
+          <button data-view="translated">Translated</button>
+          <button data-view="side">Side by side</button>
+        </div>
+        <select id="langSelect" title="Translate to"></select>
+        <button id="progress" class="progress" title=""></button>
+        <a id="origLink" class="btn icon" target="_blank" rel="noopener" hidden title="Open the original PDF in Chrome's viewer">↗</a>
+      </div>
+    </header>
+
+    <main id="viewer" tabindex="0">
+      <div id="pages"></div>
+    </main>
+
+    <div id="drop" class="drop" hidden>
+      <div class="drop-card">
+        <img src="../icons/icon128.png" alt="" width="64" height="64" />
+        <h2>PDF Translator</h2>
+        <p>Drop a PDF anywhere on this page, or</p>
+        <button id="chooseBtn" class="primary">Choose a PDF file</button>
+        <p class="hint">
+          For a PDF that is open in a tab, click the Paper Translator button in Chrome's toolbar and choose
+          <b>Translate this PDF</b>. Right-click a PDF link → <b>Open link as PDF in Paper Translator</b> also works.
+        </p>
+      </div>
+    </div>
+
+    <div id="message" class="message" hidden>
+      <div class="message-card">
+        <p id="messageText"></p>
+        <div id="messageActions" class="message-actions"></div>
+      </div>
+    </div>
+
+    <div id="measure" class="measure" aria-hidden="true"></div>
+
+    <script src="../lib/defaults.js"></script>
+    <script src="../lib/markers.js"></script>
+    <script src="../lib/glossary.js"></script>
+    <script type="module" src="viewer.js"></script>
+  </body>
+</html>
